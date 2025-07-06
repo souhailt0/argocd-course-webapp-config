@@ -1,0 +1,27 @@
+pr_name: pr-14
+replicaCount: 1
+
+image:
+  repository: str25/argocd-course-webapp
+  pullPolicy: IfNotPresent
+  pr_name: pr-14
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+
+service:
+  pr_name: pr-14
+  type: ClusterIP
+  port: 80
+
+ingress:
+  className: "nginx"
+  host: example.com
+  pr_name: pr-14
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
