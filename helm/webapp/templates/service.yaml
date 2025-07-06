@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.service.pr_name }}
   namespace: {{ .Values.pr_name }}
   labels:
-    {{- include "demo.labels" . | nindent 4 }}
+    prv: {{ .Values.pr_name }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -13,4 +13,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "demo.selectorLabels" . | nindent 4 }}
+    prv: {{ .Values.pr_name }}

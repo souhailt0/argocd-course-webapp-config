@@ -1,24 +1,22 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ .Values.pr_name }}
   namespace: {{ .Values.pr_name }}
   labels:
-    {{- include "demo.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+    prv: {{ .Values.pr_name }} 
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
-    - host: {{ .Values.ingress.pr-name }}-{{ .Values.ingress.host }}
+    - host: {{ .Values.ingress.pr_name }}-{{ .Values.ingress.host }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.service.pr-name }}
+                name: {{ .Values.service.pr_name }}
                 port:
                   number: 80

@@ -2,37 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: {{ .Values.pr_name }}
-  name: {{ include "demo.fullname" . }}
+  name: {{ .Values.pr_name }}
   labels:
-    {{- include "demo.labels" . | nindent 4 }}
+   prv: {{ .Values.pr_name }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "demo.selectorLabels" . | nindent 6 }}
+      prv: {{ .Values.pr_name }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      name: {{ .Values.pr_name }}
       labels:
-        {{- include "demo.selectorLabels" . | nindent 8 }}
+       prv: {{ .Values.pr_name }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "demo.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.pr_name | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.pr_name }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -46,17 +32,3 @@ spec:
             httpGet:
               path: /
               port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
