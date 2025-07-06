@@ -1,4 +1,4 @@
-
+pr_name: ""
 replicaCount: 1
 
 image:
